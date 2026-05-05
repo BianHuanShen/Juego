@@ -463,6 +463,7 @@ function startLevel() {
 
 // ===== CUENTA REGRESIVA =====
 function startCountdown() {
+    const g = state.game;
     let phase = 'memo';
     let memoTime = state.settings.memoTime;
     let count = CONFIG.COUNTDOWN_TIME;
