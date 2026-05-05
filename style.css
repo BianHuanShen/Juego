@@ -1,6 +1,4 @@
-/* =========================
-   BASE
-========================= */
+/* BASE */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -13,18 +11,14 @@ body {
     color: white;
     text-align: center;
     min-height: 100vh;
-    overflow-x: hidden;
+    overflow: hidden;
 }
 
-/* =========================
-   PANTALLAS
-========================= */
+/* PANTALLAS */
 .screen {
     display: none;
     padding: 20px;
     min-height: 100vh;
-
-    display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -34,14 +28,11 @@ body {
     display: flex;
 }
 
-/* =========================
-   LOGO
-========================= */
+/* LOGO */
 .logo {
-    font-size: 3rem;
+    font-size: 2.8rem;
     font-weight: 900;
     margin-bottom: 10px;
-
     background: linear-gradient(135deg, #667eea, #764ba2);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -52,102 +43,34 @@ body {
     margin-bottom: 30px;
 }
 
-/* =========================
-   BOTONES PRO
-========================= */
+/* BOTONES */
 .btn {
-    padding: 12px 28px;
+    padding: 12px 25px;
     margin: 8px;
     border: none;
     border-radius: 999px;
     font-weight: 700;
-    font-size: 1rem;
-
     background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
-
     cursor: pointer;
-    transition: all 0.25s ease;
-
-    box-shadow: 0 6px 15px rgba(102,126,234,0.4);
-}
-
-.btn:hover {
-    transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 10px 25px rgba(102,126,234,0.6);
+    transition: 0.2s;
 }
 
 .btn:active {
     transform: scale(0.95);
 }
 
-/* botón secundario */
-.btn.secondary {
-    background: rgba(255,255,255,0.1);
-    border: 2px solid rgba(255,255,255,0.2);
-}
-
-/* =========================
-   CANVAS
-========================= */
+/* CANVAS */
 canvas {
-    background: #ffffff;
+    background: #fff;
     border-radius: 15px;
-    margin: 15px 0;
-
-    box-shadow:
-        0 10px 30px rgba(0,0,0,0.4),
-        inset 0 0 10px rgba(0,0,0,0.05);
-
-    transition: transform 0.2s;
+    margin: 10px 0;
+    width: 90vw;
+    max-width: 300px;
+    height: auto;
 }
 
-canvas:active {
-    transform: scale(0.98);
-}
-
-/* =========================
-   CONTROLES
-========================= */
+/* CONTROLES */
 .controls {
     margin-top: 10px;
-}
-
-/* =========================
-   ANIMACIONES
-========================= */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.screen.active {
-    animation: fadeIn 0.4s ease;
-}
-
-/* =========================
-   EFECTO GLOW GLOBAL
-========================= */
-.glow {
-    box-shadow: 0 0 15px rgba(255,255,255,0.6);
-}
-
-/* =========================
-   RESPONSIVE (CELULAR)
-========================= */
-@media (max-width: 480px) {
-    .logo {
-        font-size: 2.2rem;
-    }
-
-    .btn {
-        width: 80%;
-        font-size: 0.9rem;
-    }
 }
