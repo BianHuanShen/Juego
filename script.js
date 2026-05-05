@@ -1094,14 +1094,18 @@ function resetProgress() {
         renderUsers();
     }
 }
-
 // ===== CONFETTI =====
 function fireConfetti() {
+    if (!canvasConfetti || !ctxConfetti) return; // ✅ protección
+
     const particles = [];
     const colors = ['#f43f5e', '#8b5cf6', '#3b82f6', '#10b981', '#f59e0b', '#ec4899', '#667eea', '#764ba2'];
 
-    canvasConfetti.width = window.innerWidth;
-    canvasConfetti.height = window.innerHeight;
+    // (Opcional) solo ajusta si no coincide
+    if (canvasConfetti.width !== window.innerWidth) {
+        canvasConfetti.width = window.innerWidth;
+        canvasConfetti.height = window.innerHeight;
+    }
 
     for (let i = 0; i < 100; i++) {
         particles.push({
@@ -1125,6 +1129,7 @@ function fireConfetti() {
         particles.forEach(p => {
             if (p.life > 0) {
                 alive = true;
+
                 p.x += p.vx;
                 p.y += p.vy;
                 p.vy += 0.25;
@@ -1146,7 +1151,6 @@ function fireConfetti() {
 
     animate();
 }
-
 // ===== INICIALIZACIÓN =====
 function init() {
     loadData();
@@ -1159,15 +1163,18 @@ function init() {
     // Configurar audio
     audio.enabled = state.settings.sound;
 
-    // Resize confetti canvas
-    canvasConfetti.width = window.innerWidth;
-    canvasConfetti.height = window.innerHeight;
-    window.addEventListener('resize', () => {
-        canvasConfetti.width = window.innerWidth;
-        canvasConfetti.height = window.innerHeight;
-    });
+    // ===== CONFIGURAR CANVAS CONFETTI (SEGURO) =====
+    if (canvasConfetti) {
+        const resizeCanvas = () => {
+            canvasConfetti.width = window.innerWidth;
+            canvasConfetti.height = window.innerHeight;
+        };
 
-    // Mostrar pantalla inicial
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+    }
+
+    // ===== MOSTRAR PANTALLA INICIAL =====
     if (state.currentUser && state.users.find(u => u.id === state.currentUser)) {
         showStartScreen();
     } else {
@@ -1176,5 +1183,5 @@ function init() {
     }
 }
 
-// Iniciar
-init();
+// ===== INICIAR CUANDO EL DOM ESTÉ LISTO =====
+document.addEventListener('DOMContentLoaded', init);
