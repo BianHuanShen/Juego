@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Grid</title>
+
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div id="startScreen" class="screen active">
+    <h1 class="logo">🧠 BRAIN GRID</h1>
+    <p class="subtitle">Memoriza y dibuja</p>
+    <button id="btnPlay" class="btn">JUGAR</button>
+</div>
+
+<div id="gameScreen" class="screen">
+    <h2 id="levelDisplay">Nivel 1</h2>
+
+    <p>Memoriza:</p>
+    <canvas id="targetCanvas"></canvas>
+
+    <p>Dibuja:</p>
+    <canvas id="playerCanvas"></canvas>
+
+    <div class="controls">
+        <button id="btnVerify" class="btn">Verificar</button>
+        <button id="btnClear" class="btn">Limpiar</button>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
