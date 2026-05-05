@@ -1027,58 +1027,88 @@ function showLeaderboard() {
 
     // Guardar
     localStorage.setItem('brainGridLeaderboard', JSON.stringify(allScores));
+// Renderizar
+if (!list) return; // ✅ protección
+allScores.forEach((entry, i) => {
+    const div = document.createElement('div');
+    div.className = 'lb-item';
 
-    // Renderizar
-    allScores.forEach((entry, i) => {
-        const div = document.createElement('div');
-        div.className = 'lb-item';
-        const rankClass = i === 0 ? 'gold' : i === 1 ? 'silver' : i === 2 ? 'bronze' : '';
-        div.innerHTML = `
-            <div class="lb-rank ${rankClass}">${i + 1}</div>
-            <div class="lb-info">
-                <div class="lb-name">${entry.name} ${entry.isLocal ? '(Tú)' : ''}</div>
-                <div class="lb-details">Nivel ${entry.level} | ⭐${entry.stars}</div>
-            </div>
-            <div class="lb-score">${entry.score}</div>
-        `;
-        list.appendChild(div);
-    });
+    const rankClass =
+        i === 0 ? 'gold' :
+        i === 1 ? 'silver' :
+        i === 2 ? 'bronze' : '';
 
-    if (allScores.length === 0) {
-        list.innerHTML = '<div style="text-align:center;color:#64748b;padding:20px">No hay puntuaciones aún. ¡Juega!</div>';
-    }
+    const name = entry.name || 'Jugador';
+    const level = entry.level ?? 1;
+    const stars = entry.stars ?? 0;
+    const score = entry.score ?? 0;
 
-    showScreen('screenLeaderboard');
+    div.innerHTML = `
+        <div class="lb-rank ${rankClass}">${i + 1}</div>
+        <div class="lb-info">
+            <div class="lb-name">${name} ${entry.isLocal ? '(Tú)' : ''}</div>
+            <div class="lb-details">Nivel ${level} | ⭐${stars}</div>
+        </div>
+        <div class="lb-score">${score}</div>
+    `;
+
+    list.appendChild(div);
+});
+// Mensaje si no hay datos
+if (allScores.length === 0) {
+    list.innerHTML = `
+        <div style="text-align:center;color:#64748b;padding:20px">
+            No hay puntuaciones aún. ¡Juega!
+        </div>
+    `;
 }
-
+showScreen('screenLeaderboard');
 // ===== AJUSTES =====
 function showSettings() {
-    document.getElementById('darkModeToggle').checked = state.settings.darkMode;
-    document.getElementById('soundToggle').checked = state.settings.sound;
-    document.getElementById('vibrateToggle').checked = state.settings.vibrate;
-    document.getElementById('memoTimeSelect').value = state.settings.memoTime;
+    const dark = document.getElementById('darkModeToggle');
+    const sound = document.getElementById('soundToggle');
+    const vibrate = document.getElementById('vibrateToggle');
+    const memo = document.getElementById('memoTimeSelect');
+
+    if (dark) dark.checked = state.settings.darkMode;
+    if (sound) sound.checked = state.settings.sound;
+    if (vibrate) vibrate.checked = state.settings.vibrate;
+    if (memo) memo.value = state.settings.memoTime;
+
     showScreen('screenSettings');
 }
 
 function toggleDarkMode() {
-    state.settings.darkMode = document.getElementById('darkModeToggle').checked;
+    const el = document.getElementById('darkModeToggle');
+    if (!el) return;
+
+    state.settings.darkMode = el.checked;
     document.body.classList.toggle('light-mode', !state.settings.darkMode);
     saveData();
 }
 
 function toggleSound() {
-    state.settings.sound = document.getElementById('soundToggle').checked;
-    audio.enabled = state.settings.sound;
+    const el = document.getElementById('soundToggle');
+    if (!el) return;
+
+    state.settings.sound = el.checked;
+    if (audio) audio.enabled = state.settings.sound;
     saveData();
 }
 
 function toggleVibrate() {
-    state.settings.vibrate = document.getElementById('vibrateToggle').checked;
+    const el = document.getElementById('vibrateToggle');
+    if (!el) return;
+
+    state.settings.vibrate = el.checked;
     saveData();
 }
 
 function changeMemoTime() {
-    state.settings.memoTime = parseInt(document.getElementById('memoTimeSelect').value);
+    const el = document.getElementById('memoTimeSelect');
+    if (!el) return;
+
+    state.settings.memoTime = parseInt(el.value) || 6;
     saveData();
 }
 
@@ -1086,9 +1116,16 @@ function resetProgress() {
     if (confirm('⚠️ ¿Borrar TODO el progreso? Esta acción no se puede deshacer.')) {
         localStorage.removeItem('brainGridPro');
         localStorage.removeItem('brainGridLeaderboard');
+
         state.users = [];
         state.currentUser = null;
-        SKINS.forEach((s, i) => { s.owned = i === 0; });
+
+        // Reset skins de forma segura
+        if (Array.isArray(SKINS)) {
+            SKINS.forEach((s, i) => {
+                s.owned = i === 0;
+            });
+        }
         showToast('🗑️ Progreso borrado');
         showScreen('screenUsers');
         renderUsers();
