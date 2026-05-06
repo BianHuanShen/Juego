@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #0f1220;
+  color: white;
+  text-align: center;
+}
+
+.screen {
+  display: none;
+  padding: 20px;
+}
+
+.screen.active {
+  display: block;
+}
+
+canvas {
+  width: 90vw;
+  height: 90vw;
+  max-width: 400px;
+  max-height: 400px;
+  background: #151933;
+  border-radius: 15px;
+  touch-action: none;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+button {
+  padding: 10px;
+  margin: 10px;
+  border-radius: 10px;
+  border: none;
+  background: #4CAF50;
+  color: white;
+}
+
+.progress {
+  height: 5px;
+  background: lime;
+  margin-top: 10px;
+  transition: width 0.3s;
+}
+
+.glow {
+  box-shadow: 0 0 20px cyan;
+}
