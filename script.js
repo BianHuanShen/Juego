@@ -902,7 +902,6 @@ function deleteUser(e, id) {
         renderUsers();
     }
 }
-
 // ===== PANTALLA INICIO =====
 function showStartScreen() {
     const user = state.users.find(u => u.id === state.currentUser);
@@ -911,14 +910,18 @@ function showStartScreen() {
         return;
     }
 
-    document.getElementById('welcomeUser').textContent = '¡Hola, ' + user.name + '!';
-    document.getElementById('startStars').textContent = user.stars || 0;
-    document.getElementById('startCoins').textContent = user.coins || 0;
-    document.getElementById('startStreak').textContent = user.streak || 0;
+    const welcome = document.getElementById('welcomeUser');
+    const stars = document.getElementById('startStars');
+    const coins = document.getElementById('startCoins');
+    const streak = document.getElementById('startStreak');
+
+    if (welcome) welcome.textContent = '¡Hola, ' + (user.name || 'Jugador') + '!';
+    if (stars) stars.textContent = user.stars || 0;
+    if (coins) coins.textContent = user.coins || 0;
+    if (streak) streak.textContent = user.streak || 0;
 
     showScreen('screenStart');
 }
-
 // ===== INICIAR JUEGO =====
 function startGame() {
     const user = state.users.find(u => u.id === state.currentUser);
@@ -950,27 +953,46 @@ function startGame() {
     showScreen('screenGame');
     startLevel();
 }
-
 // ===== SKINS =====
 function showSkins() {
     const user = state.users.find(u => u.id === state.currentUser);
     if (!user) return;
 
-    document.getElementById('skinCoins').textContent = user.coins || 0;
+    const coinsEl = document.getElementById('skinCoins');
+    if (coinsEl) {
+        coinsEl.textContent = user.coins || 0;
+    }
 
     const grid = document.getElementById('skinsGrid');
+    if (!grid) {
+        console.error('skinsGrid no encontrado');
+        return; // ✅ evita romper todo
+    }
+
     grid.innerHTML = '';
+
+    if (!Array.isArray(SKINS)) return; // ✅ protección
 
     SKINS.forEach(skin => {
         const isOwned = skin.owned || (user.skins && user.skins.includes(skin.id));
         const isSelected = user.currentSkin === skin.id;
 
         const card = document.createElement('div');
-        card.className = 'skin-card' + (isOwned ? ' owned' : ' locked') + (isSelected ? ' selected' : '');
+        card.className =
+            'skin-card' +
+            (isOwned ? ' owned' : ' locked') +
+            (isSelected ? ' selected' : '');
+
         card.innerHTML = `
-            <div class="skin-preview">${skin.emoji}</div>
-            <div class="skin-name">${skin.name}</div>
-            <div class="skin-price">${isOwned ? (isSelected ? '✅ Activo' : 'Usar') : skin.price + '🪙'}</div>
+            <div class="skin-preview">${skin.emoji || '❓'}</div>
+            <div class="skin-name">${skin.name || 'Skin'}</div>
+            <div class="skin-price">
+                ${
+                    isOwned
+                        ? (isSelected ? '✅ Activo' : 'Usar')
+                        : (skin.price || 0) + '🪙'
+                }
+            </div>
         `;
 
         card.onclick = () => {
@@ -978,18 +1000,25 @@ function showSkins() {
                 user.currentSkin = skin.id;
                 saveData();
                 showSkins();
-                showToast('🎨 ' + skin.name + ' activado');
-            } else if ((user.coins || 0) >= skin.price) {
-                user.coins -= skin.price;
+                showToast('🎨 ' + (skin.name || 'Skin') + ' activado');
+            } 
+            else if ((user.coins || 0) >= (skin.price || 0)) {
+                user.coins -= (skin.price || 0);
                 skin.owned = true;
-                if (!user.skins) user.skins = [];
+
+                if (!Array.isArray(user.skins)) {
+                    user.skins = [];
+                }
+
                 user.skins.push(skin.id);
                 user.currentSkin = skin.id;
+
                 saveData();
                 showSkins();
-                showToast('🎉 ' + skin.name + ' comprado!');
-            } else {
-                showToast('💰 Necesitas ' + skin.price + '🪙');
+                showToast('🎉 ' + (skin.name || 'Skin') + ' comprado!');
+            } 
+            else {
+                showToast('💰 Necesitas ' + (skin.price || 0) + '🪙');
             }
         };
 
@@ -998,35 +1027,53 @@ function showSkins() {
 
     showScreen('screenSkins');
 }
-
 // ===== RANKING =====
 function showLeaderboard() {
     const list = document.getElementById('leaderboardList');
+
+    if (!list) {
+        console.error('leaderboardList no encontrado');
+        return; // ✅ evita que rompa todo
+    }
+
     list.innerHTML = '';
 
     // Combinar usuarios locales
-    let allScores = state.users.map(u => ({
-        name: u.name,
+    let allScores = (state.users || []).map(u => ({
+        name: u.name || 'Jugador',
         score: u.score || 0,
         level: u.level || 1,
         stars: u.stars || 0,
         isLocal: true
     }));
+// Añadir scores de localStorage
+try {
+    const raw = localStorage.getItem('brainGridLeaderboard');
+    const saved = raw ? JSON.parse(raw) : [];
 
-    // Añadir scores de localStorage
-    try {
-        const saved = JSON.parse(localStorage.getItem('brainGridLeaderboard'));
-        if (saved && Array.isArray(saved)) {
-            allScores = allScores.concat(saved.filter(s => !allScores.find(u => u.name === s.name)));
-        }
-    } catch(e) {}
+    if (Array.isArray(saved)) {
+        allScores = allScores.concat(
+            saved.filter(s => 
+                s && s.name && !allScores.find(u => u.name === s.name)
+            )
+        );
+    }
+} catch (e) {
+    console.warn('Error leyendo leaderboard:', e);
+}
 
-    // Ordenar
-    allScores.sort((a, b) => b.score - a.score);
-    allScores = allScores.slice(0, 10);
+// Ordenar (protegido)
+allScores.sort((a, b) => (b.score || 0) - (a.score || 0));
 
-    // Guardar
+// Limitar top 10
+allScores = allScores.slice(0, 10);
+
+// Guardar
+try {
     localStorage.setItem('brainGridLeaderboard', JSON.stringify(allScores));
+} catch (e) {
+    console.warn('Error guardando leaderboard:', e);
+}
 // Renderizar
 if (!list) return; // ✅ protección
 allScores.forEach((entry, i) => {
