@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brain Grid Pro</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div id="app">
+
+  <!-- USER SELECT -->
+  <div id="userScreen" class="screen active">
+    <h1>🧠 Brain Grid Pro</h1>
+    <div id="profiles"></div>
+    <button onclick="createUser()">+ Crear Perfil</button>
+  </div>
+
+  <!-- GAME -->
+  <div id="gameScreen" class="screen">
+    <div class="topbar">
+      <span id="playerName"></span>
+      <span id="score">0</span>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+    <div class="progress" id="progress"></div>
+  </div>
+
+  <!-- LEADERBOARD -->
+  <div id="leaderboardScreen" class="screen">
+    <h2>🏆 Ranking</h2>
+    <ul id="leaderboard"></ul>
+    <button onclick="backToMenu()">Volver</button>
+  </div>
+
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
