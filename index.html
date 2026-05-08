@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <!-- =========================================
+       META
+  ========================================== -->
+
+  <meta charset="UTF-8" />
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  />
+
+  <meta
+    name="theme-color"
+    content="#070b16"
+  />
+
+  <meta
+    name="description"
+    content="Brain Grid Pro - Juego de memoria futurista estilo GOD MODE."
+  />
+
+  <title>Brain Grid Pro | GOD MODE</title>
+
+  <!-- =========================================
+       FONTS
+  ========================================== -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <!-- =========================================
+       CSS
+  ========================================== -->
+
+  <link rel="stylesheet" href="styles.css" />
+
+</head>
+
+<body>
+
+  <!-- =========================================
+       APP
+  ========================================== -->
+
+  <div id="app">
+
+    <!-- =========================================
+         USER SCREEN
+    ========================================== -->
+
+    <div id="userScreen" class="screen active glow">
+
+      <h1>🧠 Brain Grid Pro</h1>
+
+      <p class="subtitle">
+        Memoriza. Reacciona. Domina la cuadrícula.
+      </p>
+
+      <!-- Profiles -->
+      <div id="profiles"></div>
+
+      <!-- Actions -->
+      <button onclick="createUser()">
+        + Crear Perfil
+      </button>
+
+    </div>
+
+    <!-- =========================================
+         GAME SCREEN
+    ========================================== -->
+
+    <div id="gameScreen" class="screen">
+
+      <!-- TOPBAR -->
+      <div class="topbar">
+
+        <!-- PLAYER -->
+        <div>
+          👤
+          <span id="playerName">
+            Jugador
+          </span>
+        </div>
+
+        <!-- SCORE -->
+        <div>
+          ⭐ Score:
+          <span id="score">0</span>
+        </div>
+
+      </div>
+
+      <!-- CANVAS -->
+      <canvas
+        id="gameCanvas"
+        class="glow"
+      ></canvas>
+
+      <!-- PROGRESS -->
+      <div class="progress-container">
+
+        <div
+          class="progress"
+          id="progress"
+        ></div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================
+         LEADERBOARD SCREEN
+    ========================================== -->
+
+    <div id="leaderboardScreen" class="screen glow">
+
+      <h2>
+        🏆 Ranking Global
+      </h2>
+
+      <p class="subtitle">
+        Los mejores jugadores del sistema.
+      </p>
+
+      <ul id="leaderboard"></ul>
+
+      <button onclick="backToMenu()">
+        ← Volver
+      </button>
+
+    </div>
+
+  </div>
+
+  <!-- =========================================
+       SCRIPT
+  ========================================== -->
+
+  <script src="script.js"></script>
+
+</body>
+</html>
