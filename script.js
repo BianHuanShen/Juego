@@ -198,40 +198,75 @@ function updateProgress(){
   document.getElementById("progress").style.width = percent+"%";
 }
 
-/* RESULTS */
+/* =========================
+   RESULTS SYSTEM
+========================= */
 
-function success(){
-  vibrate([50,50,100]);
-  playSound(800,0.2);
+function success() {
 
-  let time = (Date.now() - startTime)/1000;
-  let bonus = Math.max(1, 5 - time);
+  // Feedback
+  vibrate([50, 50, 100]);
+  playSound(800, 0.2);
 
-  score += (10 * combo) + bonus;
+  // Tiempo en segundos
+  const elapsedTime = (Date.now() - startTime) / 1000;
+
+  // Bonus entero basado en velocidad
+  const speedBonus = Math.floor(
+    Math.max(1, 5 - elapsedTime)
+  );
+
+  // Puntos base
+  const basePoints = 10 * combo;
+
+  // Score final (solo enteros)
+  score += basePoints + speedBonus;
+
+  // Seguridad extra para evitar decimales
+  score = Math.floor(score);
+
+  // Incrementos de progreso
   combo++;
-
   level++;
 
+  // Actualizar UI y guardar datos
   updateScore();
 
-  setTimeout(startGame,500);
+  // Siguiente ronda
+  setTimeout(startGame, 500);
 }
 
-function fail(){
+function fail() {
+
+  // Feedback de error
   vibrate(300);
-  playSound(100,0.3);
+  playSound(100, 0.3);
 
+  // Reiniciar combo
   combo = 1;
-  level = Math.max(1, level-1);
 
-  setTimeout(startGame,800);
+  // Evitar nivel menor a 1
+  level = Math.max(1, level - 1);
+
+  // Reiniciar partida
+  setTimeout(startGame, 800);
 }
 
-function updateScore(){
-  document.getElementById("score").textContent = score;
-  currentUser.score = score;
+function updateScore() {
+
+  // Mostrar score entero
+  document.getElementById("score").textContent = Math.floor(score);
+
+  // Guardar progreso usuario
+  currentUser.score = Math.floor(score);
+  currentUser.level = level;
+
+  // Persistencia local
   saveUsers();
 }
 
-/* INIT */
+/* =========================
+   INIT
+========================= */
+
 renderUsers();
