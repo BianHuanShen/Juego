@@ -215,20 +215,23 @@ function selectUser(i) {
 
   currentUser = users[i];
 
-  // Actualizar UI
+  // Actualizar UI 
+  // Actualizar player
   document.getElementById(
     "playerName"
   ).textContent = currentUser.name;
-
+  // ACTUALIZAR NIVEL
+  document.getElementById(
+    "level"
+  ).textContent = "Nivel " + currentUser.level;
+  // Actualizar Score
   document.getElementById(
     "score"
   ).textContent = Math.floor(
     currentUser.score
   );
-
   // Cambiar pantalla
   showScreen("gameScreen");
-
   // Iniciar juego
   startGame();
 }
@@ -237,9 +240,7 @@ function showScreen(id){
   document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
-
 /* GAME LOGIC */
-
 function generatePath(){
   let p = [{x:2,y:2}];
   let length = 3 + Math.floor(level/2);
