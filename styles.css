@@ -372,7 +372,117 @@ button:active {
     transform: translateY(0);
   }
 }
+/* =========================================
+   MODAL CREATE USER
+========================================= */
 
+.modal-overlay {
+
+  position: fixed;
+
+  inset: 0;
+
+  background:
+    rgba(0,0,0,.75);
+
+  backdrop-filter: blur(10px);
+
+  display: flex;
+
+  justify-content: center;
+  align-items: center;
+
+  z-index: 9999;
+
+  animation: fadeIn .25s ease;
+}
+
+.modal-box {
+
+  width: 90%;
+  max-width: 420px;
+
+  padding: 30px;
+
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(18,25,45,.95),
+      rgba(10,15,28,.98)
+    );
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    0 20px 60px rgba(0,0,0,.65),
+    0 0 35px rgba(0,229,255,.18);
+
+  text-align: center;
+}
+
+.modal-box h2 {
+
+  font-size: 2rem;
+
+  margin-bottom: 10px;
+
+  color: #00e5ff;
+}
+
+.modal-box p {
+
+  color: #9ea8c7;
+
+  margin-bottom: 22px;
+}
+
+.modal-box input {
+
+  width: 100%;
+
+  padding: 16px;
+
+  border-radius: 16px;
+
+  border:
+    1px solid rgba(255,255,255,.08);
+
+  background:
+    rgba(255,255,255,.05);
+
+  color: white;
+
+  font-size: 1rem;
+
+  outline: none;
+
+  transition: .2s;
+}
+
+.modal-box input:focus {
+
+  border-color: #00e5ff;
+
+  box-shadow:
+    0 0 20px rgba(0,229,255,.25);
+}
+
+.modal-buttons {
+
+  display: flex;
+
+  gap: 12px;
+
+  margin-top: 22px;
+}
+
+.modal-buttons button {
+
+  flex: 1;
+}
 /* =========================================
    MOBILE
 ========================================= */
