@@ -98,7 +98,7 @@ function renderUsers() {
     container.appendChild(card);
   });
 }
-function createUser() {
+/*function createUser() {
   // Nombre usuario
   const name = prompt(
     "Ingresa tu nombre:"
@@ -136,6 +136,125 @@ function createUser() {
   saveUsers();
   // Actualizar interfaz
   renderUsers();
+}*/
+/* =========================================
+   CREATE USER MODAL - GOD MODE
+========================================= */
+
+function createUser() {
+
+  // Evitar duplicar modal
+  if (document.getElementById("userModal")) return;
+
+  // Crear fondo modal
+  const modal = document.createElement("div");
+
+  modal.id = "userModal";
+
+  modal.innerHTML = `
+
+    <div class="modal-overlay">
+
+      <div class="modal-box glow">
+
+        <h2>
+          👤 Crear Perfil
+        </h2>
+
+        <p>
+          Ingresa tu nombre de jugador
+        </p>
+
+        <input
+          type="text"
+          id="usernameInput"
+          placeholder="Ej: ShadowX"
+          maxlength="14"
+          autocomplete="off"
+        >
+
+        <div class="modal-buttons">
+
+          <button id="cancelUserBtn">
+            Cancelar
+          </button>
+
+          <button id="saveUserBtn">
+            Crear Perfil
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  `;
+  // Insertar modal
+  document.body.appendChild(modal);
+  // Focus automático
+  const input =
+    document.getElementById("usernameInput");
+  input.focus();
+  // Cancelar modal
+  document
+    .getElementById("cancelUserBtn")
+    .onclick = () => {
+      modal.remove();
+    };
+  // Guardar usuario
+  document
+    .getElementById("saveUserBtn")
+    .onclick = saveUser;
+  // Enter para guardar
+  input.addEventListener("keydown", e => {
+
+    if (e.key === "Enter") {
+      saveUser();
+    }
+  });
+
+  /* =========================
+     SAVE USER
+  ========================= */
+  function saveUser() {
+    const cleanName =
+      input.value.trim();
+    // Validación longitud
+    if (cleanName.length < 3) {
+      input.style.border =
+        "2px solid red";
+      input.placeholder =
+        "Mínimo 3 caracteres";
+      return;
+    }
+    // Verificar duplicados
+    const exists = users.some(
+      u =>
+        u.name.toLowerCase() ===
+        cleanName.toLowerCase()
+    );
+    if (exists) {
+      input.value = "";
+      input.style.border =
+        "2px solid red";
+      input.placeholder =
+        "Ese nombre ya existe";
+      return;
+    }
+    // Crear perfil
+    users.push({
+      name: cleanName,
+      score: 0,
+      level: 1
+    });
+    // Guardar
+    saveUsers();
+    // Actualizar UI
+    renderUsers();
+    // Cerrar modal
+    modal.remove();
+  }
 }
 function selectUser(i) {
 
