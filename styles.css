@@ -1,0 +1,398 @@
+/* =========================================
+   BRAIN GRID PRO - GOD MODE UI
+========================================= */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+
+  /* COLORS */
+  --bg-main: #070b16;
+  --bg-secondary: #10182d;
+  --bg-card: rgba(20, 28, 48, 0.75);
+
+  --cyan: #00e5ff;
+  --cyan-soft: rgba(0, 229, 255, 0.25);
+
+  --lime: #7CFF6B;
+  --purple: #8B5CFF;
+
+  --text-main: #ffffff;
+  --text-soft: #9ea8c7;
+
+  --border: rgba(255,255,255,0.08);
+
+  --shadow-cyan:
+    0 0 10px rgba(0,229,255,.4),
+    0 0 30px rgba(0,229,255,.25),
+    0 0 60px rgba(0,229,255,.15);
+
+  --shadow-purple:
+    0 0 10px rgba(139,92,255,.4),
+    0 0 30px rgba(139,92,255,.2);
+
+}
+
+/* =========================================
+   BODY
+========================================= */
+
+body {
+
+  font-family:
+    Inter,
+    Poppins,
+    sans-serif;
+
+  min-height: 100vh;
+
+  background:
+    radial-gradient(circle at top, #16213d 0%, #070b16 45%),
+    linear-gradient(180deg, #070b16 0%, #04060d 100%);
+
+  color: var(--text-main);
+
+  overflow-x: hidden;
+  text-align: center;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 20px;
+}
+
+/* =========================================
+   SCREENS
+========================================= */
+
+.screen {
+
+  display: none;
+
+  width: 100%;
+  max-width: 520px;
+
+  padding: 24px;
+
+  border-radius: 28px;
+
+  background: var(--bg-card);
+
+  backdrop-filter: blur(18px);
+
+  border: 1px solid var(--border);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,.55),
+    inset 0 0 25px rgba(255,255,255,.03);
+
+  animation: fadeIn .45s ease;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* =========================================
+   TITLE
+========================================= */
+
+h1 {
+
+  font-size: clamp(2rem, 5vw, 3rem);
+
+  font-weight: 900;
+
+  letter-spacing: 3px;
+
+  margin-bottom: 10px;
+
+  background: linear-gradient(
+    90deg,
+    #ffffff,
+    #00e5ff,
+    #7CFF6B
+  );
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  text-shadow:
+    0 0 12px rgba(0,229,255,.45);
+}
+
+.subtitle {
+
+  color: var(--text-soft);
+
+  margin-bottom: 25px;
+
+  font-size: .95rem;
+
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   CANVAS
+========================================= */
+
+canvas {
+
+  width: 90vw;
+  height: 90vw;
+
+  max-width: 420px;
+  max-height: 420px;
+
+  border-radius: 24px;
+
+  background:
+    linear-gradient(
+      145deg,
+      #11192f,
+      #0b1020
+    );
+
+  border: 1px solid rgba(255,255,255,.08);
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    0 20px 50px rgba(0,0,0,.6),
+    0 0 35px rgba(0,229,255,.18);
+
+  touch-action: none;
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+canvas:hover {
+
+  transform: scale(1.01);
+
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.04),
+    0 25px 60px rgba(0,0,0,.7),
+    0 0 45px rgba(0,229,255,.25);
+}
+
+/* =========================================
+   TOPBAR
+========================================= */
+
+.topbar {
+
+  display: flex;
+
+  justify-content: space-between;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+.topbar div {
+
+  flex: 1;
+
+  padding: 14px;
+
+  border-radius: 18px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(255,255,255,.06),
+      rgba(255,255,255,.02)
+    );
+
+  border: 1px solid rgba(255,255,255,.06);
+
+  box-shadow:
+    inset 0 0 10px rgba(255,255,255,.02),
+    0 0 12px rgba(0,0,0,.25);
+
+  font-weight: 700;
+
+  font-size: .95rem;
+
+  letter-spacing: 1px;
+}
+
+/* =========================================
+   BUTTONS
+========================================= */
+
+button {
+
+  position: relative;
+
+  padding: 14px 22px;
+
+  margin: 10px;
+
+  border: none;
+  border-radius: 16px;
+
+  cursor: pointer;
+
+  font-size: 1rem;
+  font-weight: 700;
+
+  letter-spacing: 1px;
+
+  color: white;
+
+  background:
+    linear-gradient(
+      135deg,
+      #00bcd4,
+      #4caf50
+    );
+
+  box-shadow:
+    0 10px 25px rgba(0,0,0,.4),
+    0 0 20px rgba(0,229,255,.25);
+
+  transition:
+    transform .18s ease,
+    box-shadow .18s ease,
+    filter .18s ease;
+}
+
+button:hover {
+
+  transform: translateY(-2px) scale(1.03);
+
+  filter: brightness(1.1);
+
+  box-shadow:
+    0 15px 35px rgba(0,0,0,.5),
+    0 0 30px rgba(0,229,255,.45);
+}
+
+button:active {
+
+  transform: scale(.96);
+}
+
+/* =========================================
+   PROGRESS BAR
+========================================= */
+
+.progress-container {
+
+  width: 100%;
+
+  height: 12px;
+
+  margin-top: 18px;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  background:
+    rgba(255,255,255,.06);
+
+  border: 1px solid rgba(255,255,255,.05);
+}
+
+.progress {
+
+  height: 100%;
+  width: 0%;
+
+  border-radius: inherit;
+
+  background:
+    linear-gradient(
+      90deg,
+      #00e5ff,
+      #7CFF6B
+    );
+
+  box-shadow:
+    0 0 15px rgba(0,229,255,.6),
+    0 0 30px rgba(124,255,107,.35);
+
+  transition: width .25s ease;
+}
+
+/* =========================================
+   GLOW EFFECT
+========================================= */
+
+.glow {
+
+  box-shadow:
+    0 0 15px rgba(0,229,255,.5),
+    0 0 35px rgba(0,229,255,.3),
+    0 0 70px rgba(0,229,255,.15);
+}
+
+/* =========================================
+   PLAYER NAME
+========================================= */
+
+#playerName {
+
+  font-size: 1.2rem;
+
+  font-weight: 800;
+
+  margin-bottom: 15px;
+
+  color: var(--cyan);
+
+  text-shadow:
+    0 0 15px rgba(0,229,255,.4);
+}
+
+/* =========================================
+   ANIMATIONS
+========================================= */
+
+@keyframes fadeIn {
+
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+
+  .screen {
+    padding: 18px;
+    border-radius: 22px;
+  }
+
+  .topbar {
+    flex-direction: column;
+  }
+
+  .topbar div {
+    width: 100%;
+  }
+
+  button {
+    width: 100%;
+  }
+}
