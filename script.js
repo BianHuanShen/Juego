@@ -36,84 +36,37 @@ function playSound(freq, duration){
 
   osc.stop(audioCtx.currentTime + duration);
 }
-
-/* USERS 
-function saveUsers(){
-  localStorage.setItem("users", JSON.stringify(users));
-}
-
-function renderUsers(){
-  const container = document.getElementById("profiles");
-  container.innerHTML = "";
-
-  users.forEach((u,i)=>{
-    const btn = document.createElement("button");
-    btn.textContent = `${u.name} ${u.score}`;
-    btn.onclick = ()=> selectUser(i);
-    container.appendChild(btn);
-  });
-}
-
-function createUser(){
-  if(users.length >= 3) return alert("Máximo 3 usuarios");
-  const name = prompt("Nombre:");
-  if(!name) return;
-
-  users.push({name, score:0, level:1});
-  saveUsers();
-  renderUsers();
-}
-
-function selectUser(i){
-  currentUser = users[i];
-  document.getElementById("playerName").textContent = currentUser.name;
-  showScreen("gameScreen");
-  startGame();
-}*/
 /* =========================================
-   USERS SYSTEM - GOD MODE
+   USERS SYSTEM
 ========================================= */
-
 function saveUsers() {
-
   localStorage.setItem(
     "users",
     JSON.stringify(users)
   );
 }
-
 function renderUsers() {
-
   const container =
     document.getElementById("profiles");
-
   container.innerHTML = "";
-
   // Ordenar por score descendente
   const sortedUsers = [...users].sort(
     (a, b) => b.score - a.score
   );
-
   sortedUsers.forEach((user) => {
-
     // Índice real del usuario
     const realIndex = users.findIndex(
       u => u.name === user.name
     );
-
     // Card principal
     const card =
       document.createElement("button");
-
     card.className = "profile-card glow";
-
     // Rank visual
     let rankIcon = "⚡";
-
     if (user.score >= 1000) rankIcon = "👑";
     else if (user.score >= 500) rankIcon = "🔥";
     else if (user.score >= 200) rankIcon = "⭐";
-
     // Contenido HTML
     card.innerHTML = `
 
@@ -122,99 +75,68 @@ function renderUsers() {
         <div class="profile-avatar">
           ${rankIcon}
         </div>
-
         <div class="profile-info">
-
           <h3>
             ${user.name}
           </h3>
-
           <p>
             Nivel ${user.level || 1}
           </p>
-
         </div>
-
       </div>
-
       <div class="profile-score">
-
         <span class="score-label">
           SCORE
         </span>
-
         <span class="score-value">
           ${Math.floor(user.score)}
         </span>
-
       </div>
-
     `;
-
     // Evento selección
     card.onclick = () => selectUser(realIndex);
-
     container.appendChild(card);
   });
 }
-
 function createUser() {
-
-  // Máximo perfiles
-  if (users.length >= 3) {
-
-    alert("Máximo 3 usuarios");
-    return;
-  }
-
   // Nombre usuario
   const name = prompt(
     "Ingresa tu nombre:"
   );
-
-  // Validaciones
+  // Canceló prompt
   if (!name) return;
-
+  // Limpiar espacios
   const cleanName = name.trim();
-
+  // Validación longitud
   if (cleanName.length < 3) {
-
     alert(
       "El nombre debe tener mínimo 3 caracteres"
     );
-
     return;
   }
-
-  // Evitar duplicados
+  // Evitar nombres duplicados
   const exists = users.some(
     u =>
       u.name.toLowerCase() ===
       cleanName.toLowerCase()
   );
-
   if (exists) {
-
-    alert("Ese nombre ya existe");
+    alert(
+      "Ese nombre ya existe"
+    );
     return;
   }
-
-  // Crear perfil
+  // Crear nuevo perfil
   users.push({
-
     name: cleanName,
-
     score: 0,
-
     level: 1
-
   });
-
-  // Guardar y renderizar
+  // Guardar datos
   saveUsers();
+  // Actualizar interfaz
   renderUsers();
 }
-
 function selectUser(i) {
 
   currentUser = users[i];
