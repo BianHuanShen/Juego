@@ -48,7 +48,7 @@ function renderUsers(){
 
   users.forEach((u,i)=>{
     const btn = document.createElement("button");
-    btn.textContent = `${u.name} (${u.score})`;
+    btn.textContent = `${u.name} ${u.score}`;
     btn.onclick = ()=> selectUser(i);
     container.appendChild(btn);
   });
