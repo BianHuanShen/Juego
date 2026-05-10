@@ -1456,3 +1456,14 @@ const levels = [
     {x:4,y:4}
   ]
   }
+/* GAME LOGIC */
+function generatePath(){
+
+  const index =
+    Math.min(
+      level - 1,
+      levels.length - 1
+    );
+
+  return levels[index].points;
+}
