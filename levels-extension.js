@@ -1,9 +1,9 @@
-const levels = [
+/*const levels = [
 
 /* =========================================
    FÁCIL
    NIVELES 1 - 25
-========================================= */
+========================================= 
 
 {
   level:1,
@@ -338,7 +338,7 @@ const levels = [
 /* =========================================
    NIVELES 26 - 50
    DIFICULTAD MEDIA
-========================================= */
+========================================= 
 
 {
   level:26,
@@ -667,7 +667,7 @@ const levels = [
 /* =========================================
    NIVELES 51 - 75
    DIFICULTAD INTERMEDIA
-========================================= */
+========================================= 
 
 {
   level:51,
@@ -1051,7 +1051,7 @@ const levels = [
 /* =========================================
    NIVELES 76 - 100
    DIFICULTAD DIFÍCIL / EXPERTA
-========================================= */
+========================================= 
 
 {
   level:76,
@@ -1456,7 +1456,149 @@ const levels = [
     {x:4,y:4}
   ]
   }
-   ];
+   ];*/
+const SIZE = 9;
+const levels = [];
+
+// =========================
+// 🧠 PLANTILLAS BASE
+// =========================
+
+const TEMPLATES = {
+
+  line: [
+    { x: 1, y: 4 },
+    { x: 4, y: 4 },
+    { x: 7, y: 4 }
+  ],
+
+  square: [
+    { x: 2, y: 2 },
+    { x: 6, y: 2 },
+    { x: 6, y: 6 },
+    { x: 2, y: 6 },
+    { x: 2, y: 2 }
+  ],
+
+  triangle: [
+    { x: 4, y: 1 },
+    { x: 7, y: 7 },
+    { x: 1, y: 7 },
+    { x: 4, y: 1 }
+  ],
+
+  cross: [
+    { x: 4, y: 1 },
+    { x: 4, y: 7 },
+    { x: 4, y: 4 },
+    { x: 1, y: 4 },
+    { x: 7, y: 4 }
+  ],
+
+  star: [
+    { x: 4, y: 0 },
+    { x: 5, y: 3 },
+    { x: 8, y: 3 },
+    { x: 6, y: 5 },
+    { x: 7, y: 8 },
+    { x: 4, y: 6 },
+    { x: 1, y: 8 },
+    { x: 2, y: 5 },
+    { x: 0, y: 3 },
+    { x: 3, y: 3 },
+    { x: 4, y: 0 }
+  ]
+};
+
+// =========================
+// 🎮 SELECTOR DE DIFICULTAD
+// =========================
+
+function getTemplate(level) {
+
+  if (level <= 15) return "line";
+  if (level <= 30) return "square";
+  if (level <= 50) return "triangle";
+  if (level <= 75) return "cross";
+  return "star";
+}
+
+// =========================
+// 🧠 IA DE TRANSFORMACIÓN
+// =========================
+
+function transform(points, level) {
+
+  const noise = level * 0.05; // más nivel = más distorsión
+
+  return points.map(p => ({
+    x: clamp(p.x + rand(-noise, noise)),
+    y: clamp(p.y + rand(-noise, noise))
+  }));
+}
+
+// =========================
+// 🔁 SIMETRÍA AAA
+// =========================
+
+function mirror(points) {
+  return points.map(p => ({
+    x: 8 - p.x,
+    y: p.y
+  }));
+}
+
+// =========================
+// ⚙️ CLAMP Y RANDOM
+// =========================
+
+function clamp(v) {
+  return Math.max(0, Math.min(SIZE - 1, Math.round(v)));
+}
+
+function rand(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+// =========================
+// 🔥 GENERADOR AAA
+// =========================
+
+function generateLevel(level) {
+
+  let base = getTemplate(level);
+  let points = structuredClone(TEMPLATES[base]);
+
+  // 🧠 transformación inteligente
+  points = transform(points, level);
+
+  // 🔁 niveles altos = simetría
+  if (level >= 40) {
+    const mirrored = mirror(points);
+    points = [...points, ...mirrored];
+  }
+
+  // 🔒 cerrar figura si no lo está
+  if (points.length > 2 &&
+      (points[0].x !== points.at(-1).x ||
+       points[0].y !== points.at(-1).y)) {
+    points.push(points[0]);
+  }
+
+  return {
+    level,
+    name: `Nivel ${level} - ${base}`,
+    points
+  };
+}
+
+// =========================
+// 🚀 GENERAR 100 NIVELES AAA
+// =========================
+
+for (let i = 1; i <= 100; i++) {
+  levels.push(generateLevel(i));
+   }
 /* GAME LOGIC */
 function generatePath(){
 
