@@ -1,14 +1,3 @@
-/* =========================================
-   LEVELS EXTENSION
-   NUEVAS FIGURAS EDUCATIVAS
-========================================= */
-
-levels.push(
-
-/* =========================================
-   NIVELES EDUCATIVOS INTERMEDIOS
-========================================= */
-
 {
   level:105,
   name:"Cruz",
@@ -79,10 +68,6 @@ levels.push(
   ]
 },
 
-/* =========================================
-   NIVELES AVANZADOS
-========================================= */
-
 {
   level:130,
   name:"Serpiente",
@@ -146,10 +131,6 @@ levels.push(
     {x:4,y:3}
   ]
 },
-
-/* =========================================
-   NIVELES EXPERTOS
-========================================= */
 
 {
   level:155,
@@ -234,74 +215,3 @@ levels.push(
     {x:1,y:2}
   ]
 }
-
-);
-
-/* =========================================
-   NUEVA PROGRESIÓN
-========================================= */
-
-function generatePath(){
-
-  if(level <= 4){
-    return levels[level - 1].points;
-  }
-
-  const figureIndex =
-    Math.floor((level - 5) / 5) + 4;
-
-  const safeIndex =
-    Math.min(
-      figureIndex,
-      levels.length - 1
-    );
-
-  return levels[safeIndex].points;
-}
-
-/* =========================================
-   NUEVAS FUNCIONES EDUCATIVAS
-========================================= */
-
-function getCurrentFigureName(){
-
-  if(level <= 4){
-    return levels[level - 1].name;
-  }
-
-  const figureIndex =
-    Math.floor((level - 5) / 5) + 4;
-
-  const safeIndex =
-    Math.min(
-      figureIndex,
-      levels.length - 1
-    );
-
-  return levels[safeIndex].name;
-}
-
-function updateFigureHUD(){
-
-  const figureName =
-    document.getElementById("figureName");
-
-  if(!figureName)
-    return;
-
-  figureName.textContent =
-    getCurrentFigureName();
-}
-
-/* =========================================
-   INTEGRACIÓN AUTOMÁTICA
-========================================= */
-
-const originalStartGame = startGame;
-
-startGame = function(){
-
-  updateFigureHUD();
-
-  originalStartGame();
-};
