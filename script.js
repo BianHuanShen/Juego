@@ -653,35 +653,37 @@ const levels = [
 ];
 /* GAME LOGIC */
 function generatePath(){
-  let currentFigure = levels[0];
-  for(let i = 0; i < levels.length; i++){
-    if(level >= levels[i].level){
-      currentFigure = levels[i];
-    }
-  }
-  return currentFigure.points;
+  if(level <= 1)
+    return levels[0].points;
+  if(level === 2)
+    return levels[1].points;
+  if(level === 3)
+    return levels[2].points;
+  if(level === 4)
+    return levels[3].points;
+  const figureIndex =
+    Math.floor((level - 5) / 5) + 4;
+  const safeIndex =
+    Math.min(
+      figureIndex,
+      levels.length - 1
+    );
+  return levels[safeIndex].points;
 }
 
 function drawGrid(){
-
   ctx.clearRect(
     0,
     0,
     canvas.width,
     canvas.height
   );
-
   cellSize =
     canvas.width / size;
-
   for(let x=0;x<size;x++){
-
     for(let y=0;y<size;y++){
-
       ctx.fillStyle="#222";
-
       ctx.beginPath();
-
       ctx.arc(
         x*cellSize+cellSize/2,
         y*cellSize+cellSize/2,
@@ -689,7 +691,6 @@ function drawGrid(){
         0,
         Math.PI*2
       );
-
       ctx.fill();
     }
   }
