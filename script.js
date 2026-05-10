@@ -293,7 +293,7 @@ const levels = [
 /* =========================================
    NUEVOS NIVELES INFANTILES
    MUY FÁCILES
-========================================= 
+========================================= */
 
 {
   level: 1,
@@ -340,7 +340,7 @@ const levels = [
 /* =========================================
    FIGURAS ORIGINALES
    NO MODIFICADAS
-========================================= 
+========================================= */
 
 {
   level:5,
@@ -651,7 +651,7 @@ const levels = [
 }
 
 ];
-/* GAME LOGIC 
+/* GAME LOGIC */
 function generatePath(){
 
   const index =
@@ -662,7 +662,7 @@ function generatePath(){
 
   return levels[index].points;
 }
-*/
+
 function drawGrid(){
   ctx.clearRect(
     0,
