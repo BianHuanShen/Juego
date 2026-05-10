@@ -506,3 +506,57 @@ button:active {
     width: 100%;
   }
 }
+/* =========================================
+   USER ACTIONS
+========================================= */
+
+.user-actions {
+
+  display: flex;
+
+  gap: 12px;
+
+  margin-bottom: 20px;
+}
+
+.user-actions button {
+
+  flex: 1;
+}
+
+/* =========================================
+   DANGER BUTTON
+========================================= */
+
+.danger-btn {
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff1744,
+      #d50000
+    );
+
+  box-shadow:
+    0 10px 25px rgba(255,0,0,.25),
+    0 0 20px rgba(255,0,0,.18);
+}
+
+.danger-btn:hover {
+
+  box-shadow:
+    0 15px 35px rgba(255,0,0,.35),
+    0 0 30px rgba(255,0,0,.25);
+}
+
+/* =========================================
+   MOBILE FIX
+========================================= */
+
+@media (max-width: 600px){
+
+  .user-actions{
+
+    flex-direction: column;
+  }
+}
