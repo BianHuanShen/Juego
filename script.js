@@ -653,22 +653,14 @@ const levels = [
 ];
 /* GAME LOGIC */
 function generatePath(){
-  if(level <= 1)
-    return levels[0].points;
-  if(level === 2)
-    return levels[1].points;
-  if(level === 3)
-    return levels[2].points;
-  if(level === 4)
-    return levels[3].points;
-  const figureIndex =
-    Math.floor((level - 5) / 5) + 4;
-  const safeIndex =
+
+  const index =
     Math.min(
-      figureIndex,
+      level - 1,
       levels.length - 1
     );
-  return levels[safeIndex].points;
+
+  return levels[index].points;
 }
 
 function drawGrid(){
