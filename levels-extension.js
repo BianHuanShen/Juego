@@ -1456,6 +1456,7 @@ const levels = [
     {x:4,y:4}
   ]
   }
+   ];
 /* GAME LOGIC */
 function generatePath(){
 
