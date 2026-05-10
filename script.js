@@ -1,7 +1,7 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let size = 5;
+let size = 9;
 let cellSize;
 let path = [];
 let playerPath = [];
@@ -23,22 +23,29 @@ function vibrate(ms){
 
 /* AUDIO */
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
 function playSound(freq, duration){
   const osc = audioCtx.createOscillator();
   const gain = audioCtx.createGain();
+
   osc.connect(gain);
   gain.connect(audioCtx.destination);
 
   osc.frequency.value = freq;
   osc.start();
 
-  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+  gain.gain.exponentialRampToValueAtTime(
+    0.0001,
+    audioCtx.currentTime + duration
+  );
 
   osc.stop(audioCtx.currentTime + duration);
 }
+
 /* =========================================
    USERS SYSTEM
 ========================================= */
+
 function saveUsers() {
   localStorage.setItem(
     "users",
@@ -47,74 +54,96 @@ function saveUsers() {
 }
 
 function renderUsers() {
+
   const container =
     document.getElementById("profiles");
+
   container.innerHTML = "";
-  // Ordenar por score descendente
+
   const sortedUsers = [...users].sort(
     (a, b) => b.score - a.score
   );
+
   sortedUsers.forEach((user) => {
-    // Índice real del usuario
+
     const realIndex = users.findIndex(
       u => u.name === user.name
     );
-    // Card principal
+
     const card =
       document.createElement("button");
-    card.className = "profile-card glow";
-    // Rank visual
+
+    card.className =
+      "profile-card glow";
+
     let rankIcon = "⚡";
-    if (user.score >= 1000) rankIcon = "👑";
-    else if (user.score >= 500) rankIcon = "🔥";
-    else if (user.score >= 200) rankIcon = "⭐";
-    // Contenido HTML
+
+    if(user.score >= 1000)
+      rankIcon = "👑";
+    else if(user.score >= 500)
+      rankIcon = "🔥";
+    else if(user.score >= 200)
+      rankIcon = "⭐";
+
     card.innerHTML = `
       <div class="profile-header">
+
         <div class="profile-avatar">
           ${rankIcon}
         </div>
+
         <div class="profile-info">
-          <h3>
-            ${user.name}
-          </h3>
-          <p>
-            Nivel ${user.level || 1}
-          </p>
+          <h3>${user.name}</h3>
+          <p>Nivel ${user.level || 1}</p>
         </div>
+
       </div>
+
       <div class="profile-score">
+
         <span class="score-label">
           SCORE
         </span>
+
         <span class="score-value">
           ${Math.floor(user.score)}
         </span>
+
       </div>
     `;
-    // Evento selección
-    card.onclick = () => selectUser(realIndex);
+
+    card.onclick = () =>
+      selectUser(realIndex);
+
     container.appendChild(card);
   });
 }
+
 /* =========================================
-   CREATE USER MODAL - GOD MODE
+   CREATE USER
 ========================================= */
+
 function createUser() {
-  // Evitar duplicar modal
-  if (document.getElementById("userModal")) return;
-  // Crear fondo modal
-  const modal = document.createElement("div");
+
+  if(document.getElementById("userModal"))
+    return;
+
+  const modal =
+    document.createElement("div");
+
   modal.id = "userModal";
+
   modal.innerHTML = `
     <div class="modal-overlay">
+
       <div class="modal-box glow">
-        <h2>
-          👤 Crear Perfil
-        </h2>
+
+        <h2>👤 Crear Perfil</h2>
+
         <p>
-          Ingresa tu nombre de jugador
+          Ingresa tu nombre
         </p>
+
         <input
           type="text"
           id="usernameInput"
@@ -122,171 +151,196 @@ function createUser() {
           maxlength="14"
           autocomplete="off"
         >
+
         <div class="modal-buttons">
+
           <button id="cancelUserBtn">
             Cancelar
           </button>
+
           <button id="saveUserBtn">
             Crear Perfil
           </button>
+
         </div>
+
       </div>
+
     </div>
   `;
-  // Insertar modal
+
   document.body.appendChild(modal);
-  // Focus automático
+
   const input =
     document.getElementById("usernameInput");
+
   input.focus();
-  // Cancelar modal
+
   document
     .getElementById("cancelUserBtn")
     .onclick = () => {
       modal.remove();
     };
-  // Guardar usuario
+
   document
     .getElementById("saveUserBtn")
     .onclick = saveUser;
-  // Enter para guardar
+
   input.addEventListener("keydown", e => {
 
-    if (e.key === "Enter") {
+    if(e.key === "Enter"){
       saveUser();
     }
+
   });
-  /* =========================
-     SAVE USER
-  ========================= */
-  function saveUser() {
+
+  function saveUser(){
+
     const cleanName =
       input.value.trim();
-    // Validación longitud
-    if (cleanName.length < 3) {
+
+    if(cleanName.length < 3){
+
       input.style.border =
         "2px solid red";
+
       input.placeholder =
         "Mínimo 3 caracteres";
+
       return;
     }
-    // Verificar duplicados
+
     const exists = users.some(
       u =>
         u.name.toLowerCase() ===
         cleanName.toLowerCase()
     );
-    if (exists) {
+
+    if(exists){
+
       input.value = "";
+
       input.style.border =
         "2px solid red";
+
       input.placeholder =
         "Ese nombre ya existe";
+
       return;
     }
-    // Crear perfil
+
     users.push({
       name: cleanName,
       score: 0,
       level: 1
     });
-    // Guardar
+
     saveUsers();
-    // Actualizar UI
     renderUsers();
-    // Cerrar modal
+
     modal.remove();
   }
 }
 
-function selectUser(i) {
+function selectUser(i){
+
   currentUser = users[i];
-  // ===== LÍNEA MODIFICADA =====
-  score = Number(currentUser.score) || 0;
-  level = Number(currentUser.level) || 1;
-  // Actualizar UI
+
+  score =
+    Number(currentUser.score) || 0;
+
+  level =
+    Number(currentUser.level) || 1;
+
   document.getElementById(
     "playerName"
   ).textContent = currentUser.name;
+
   document.getElementById(
     "score"
-  ).textContent = Math.floor(
-    score
-  );
-  // ===== LÍNEA MODIFICADA =====
+  ).textContent = Math.floor(score);
+
   document.getElementById(
     "level"
   ).textContent = level;
-  // Cambiar pantalla
+
   showScreen("gameScreen");
-  // Iniciar juego
+
   startGame();
 }
 
 /* SCREENS */
+
 function showScreen(id){
-  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+
+  document
+    .querySelectorAll(".screen")
+    .forEach(s =>
+      s.classList.remove("active")
+    );
+
+  document
+    .getElementById(id)
+    .classList.add("active");
 }
 
-/* GAME LOGIC */
+/* =========================================
+   FIGURAS POR NIVELES
+========================================= */
+
 const levels = [
 
-/* =========================
-   NIVELES FÁCILES
-========================= */
-
 {
-  level: 1,
-  name: "Línea",
-  points: [
-    {x:1,y:3},
-    {x:2,y:3},
-    {x:3,y:3},
-    {x:4,y:3}
-  ]
-},
-
-{
-  level: 2,
-  name: "Escalera",
-  points: [
-    {x:1,y:5},
-    {x:1,y:4},
+  level:1,
+  name:"Línea",
+  points:[
     {x:2,y:4},
-    {x:2,y:3},
-    {x:3,y:3}
+    {x:3,y:4},
+    {x:4,y:4},
+    {x:5,y:4}
   ]
 },
 
 {
-  level: 3,
-  name: "Triángulo",
-  points: [
+  level:2,
+  name:"Escalera",
+  points:[
+    {x:1,y:6},
+    {x:1,y:5},
     {x:2,y:5},
-    {x:4,y:1},
-    {x:6,y:5},
-    {x:2,y:5}
+    {x:2,y:4},
+    {x:3,y:4}
   ]
 },
 
 {
-  level: 4,
-  name: "Casa",
-  points: [
+  level:3,
+  name:"Triángulo",
+  points:[
     {x:2,y:6},
-    {x:2,y:3},
-    {x:4,y:1},
-    {x:6,y:3},
+    {x:4,y:2},
     {x:6,y:6},
     {x:2,y:6}
   ]
 },
 
 {
-  level: 5,
-  name: "Flecha",
-  points: [
+  level:4,
+  name:"Casa",
+  points:[
+    {x:2,y:7},
+    {x:2,y:4},
+    {x:4,y:2},
+    {x:6,y:4},
+    {x:6,y:7},
+    {x:2,y:7}
+  ]
+},
+
+{
+  level:5,
+  name:"Flecha",
+  points:[
     {x:1,y:4},
     {x:4,y:1},
     {x:4,y:3},
@@ -298,14 +352,10 @@ const levels = [
   ]
 },
 
-/* =========================
-   NIVELES MEDIOS
-========================= */
-
 {
-  level: 6,
-  name: "Diamante",
-  points: [
+  level:6,
+  name:"Diamante",
+  points:[
     {x:4,y:1},
     {x:7,y:4},
     {x:4,y:7},
@@ -315,25 +365,25 @@ const levels = [
 },
 
 {
-  level: 7,
-  name: "Barco",
-  points: [
-    {x:1,y:5},
+  level:7,
+  name:"Barco",
+  points:[
+    {x:1,y:6},
     {x:3,y:7},
     {x:6,y:7},
-    {x:8,y:5},
-    {x:6,y:5},
+    {x:8,y:6},
+    {x:6,y:6},
     {x:6,y:2},
     {x:4,y:1},
-    {x:4,y:5},
-    {x:1,y:5}
+    {x:4,y:6},
+    {x:1,y:6}
   ]
 },
 
 {
-  level: 8,
-  name: "Copa",
-  points: [
+  level:8,
+  name:"Copa",
+  points:[
     {x:2,y:1},
     {x:6,y:1},
     {x:5,y:4},
@@ -349,9 +399,9 @@ const levels = [
 },
 
 {
-  level: 9,
-  name: "Rayo",
-  points: [
+  level:9,
+  name:"Rayo",
+  points:[
     {x:4,y:1},
     {x:2,y:4},
     {x:4,y:4},
@@ -363,9 +413,9 @@ const levels = [
 },
 
 {
-  level: 10,
-  name: "Pez",
-  points: [
+  level:10,
+  name:"Pez",
+  points:[
     {x:1,y:4},
     {x:3,y:2},
     {x:6,y:2},
@@ -379,14 +429,10 @@ const levels = [
   ]
 },
 
-/* =========================
-   NIVELES AVANZADOS
-========================= */
-
 {
-  level: 11,
-  name: "Estrella",
-  points: [
+  level:11,
+  name:"Estrella",
+  points:[
     {x:4,y:0},
     {x:5,y:3},
     {x:8,y:3},
@@ -402,9 +448,9 @@ const levels = [
 },
 
 {
-  level: 12,
-  name: "Árbol",
-  points: [
+  level:12,
+  name:"Árbol",
+  points:[
     {x:4,y:1},
     {x:6,y:3},
     {x:5,y:3},
@@ -422,9 +468,9 @@ const levels = [
 },
 
 {
-  level: 13,
-  name: "Robot",
-  points: [
+  level:13,
+  name:"Robot",
+  points:[
     {x:2,y:1},
     {x:6,y:1},
     {x:6,y:5},
@@ -438,9 +484,9 @@ const levels = [
 },
 
 {
-  level: 14,
-  name: "Mariposa",
-  points: [
+  level:14,
+  name:"Mariposa",
+  points:[
     {x:4,y:4},
     {x:1,y:1},
     {x:2,y:4},
@@ -454,9 +500,9 @@ const levels = [
 },
 
 {
-  level: 15,
-  name: "Corona",
-  points: [
+  level:15,
+  name:"Corona",
+  points:[
     {x:1,y:7},
     {x:2,y:2},
     {x:4,y:5},
@@ -466,14 +512,10 @@ const levels = [
   ]
 },
 
-/* =========================
-   NIVELES EXPERTOS
-========================= */
-
 {
-  level: 16,
-  name: "Dragón",
-  points: [
+  level:16,
+  name:"Dragón",
+  points:[
     {x:1,y:6},
     {x:3,y:3},
     {x:5,y:4},
@@ -488,9 +530,9 @@ const levels = [
 },
 
 {
-  level: 17,
-  name: "Castillo",
-  points: [
+  level:17,
+  name:"Castillo",
+  points:[
     {x:1,y:7},
     {x:1,y:2},
     {x:2,y:2},
@@ -505,9 +547,9 @@ const levels = [
 },
 
 {
-  level: 18,
-  name: "Murciélago",
-  points: [
+  level:18,
+  name:"Murciélago",
+  points:[
     {x:0,y:4},
     {x:2,y:2},
     {x:4,y:4},
@@ -521,9 +563,9 @@ const levels = [
 },
 
 {
-  level: 19,
-  name: "Labrys",
-  points: [
+  level:19,
+  name:"Labrys",
+  points:[
     {x:4,y:0},
     {x:6,y:2},
     {x:5,y:4},
@@ -537,9 +579,9 @@ const levels = [
 },
 
 {
-  level: 20,
-  name: "Fénix",
-  points: [
+  level:20,
+  name:"Fénix",
+  points:[
     {x:4,y:0},
     {x:6,y:2},
     {x:8,y:1},
@@ -559,171 +601,283 @@ const levels = [
 ];
 
 /* GAME LOGIC */
+
 function generatePath(){
 
   const currentLevel =
-    levels.find(l => l.level === level);
+    levels.find(
+      l => l.level === level
+    );
 
   if(currentLevel){
     return currentLevel.points;
   }
 
-  // Si supera los niveles creados
-  return levels[levels.length - 1].points;
+  return levels[
+    levels.length - 1
+  ].points;
 }
 
 function drawGrid(){
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  cellSize = canvas.width / size;
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  cellSize =
+    canvas.width / size;
+
   for(let x=0;x<size;x++){
+
     for(let y=0;y<size;y++){
+
       ctx.fillStyle="#222";
+
       ctx.beginPath();
+
       ctx.arc(
         x*cellSize+cellSize/2,
         y*cellSize+cellSize/2,
-        8,0,Math.PI*2
+        8,
+        0,
+        Math.PI*2
       );
+
       ctx.fill();
     }
   }
 }
 
-function drawPath(showAll=true){
+function drawPath(){
+
   ctx.strokeStyle="cyan";
   ctx.lineWidth=5;
   ctx.shadowBlur=15;
   ctx.shadowColor="cyan";
+
   ctx.beginPath();
+
   path.forEach((p,i)=>{
-    let x = p.x*cellSize+cellSize/2;
-    let y = p.y*cellSize+cellSize/2;
-    if(i===0) ctx.moveTo(x,y);
-    else ctx.lineTo(x,y);
+
+    let x =
+      p.x*cellSize+cellSize/2;
+
+    let y =
+      p.y*cellSize+cellSize/2;
+
+    if(i===0)
+      ctx.moveTo(x,y);
+    else
+      ctx.lineTo(x,y);
+
   });
+
   ctx.stroke();
 }
 
 function startGame(){
+
   path = generatePath();
+
   playerPath = [];
+
   drawGrid();
   drawPath();
+
   setTimeout(()=>{
+
     drawGrid();
+
     startTime = Date.now();
+
   },4000);
 }
+
 /* INPUT */
-canvas.addEventListener("pointerdown", e=>{
-  const rect = canvas.getBoundingClientRect();
-  const x = Math.floor((e.clientX-rect.left)/cellSize);
-  const y = Math.floor((e.clientY-rect.top)/cellSize);
-  handleInput(x,y);
-});
+
+canvas.addEventListener(
+  "pointerdown",
+  e=>{
+
+    const rect =
+      canvas.getBoundingClientRect();
+
+    const x = Math.floor(
+      (e.clientX-rect.left)/cellSize
+    );
+
+    const y = Math.floor(
+      (e.clientY-rect.top)/cellSize
+    );
+
+    handleInput(x,y);
+  }
+);
 
 function handleInput(x,y){
+
   vibrate(10);
-  playSound(400 + playerPath.length*50,0.1);
-  const expected = path[playerPath.length];
-  if(!expected || expected.x!==x || expected.y!==y){
+
+  playSound(
+    400 + playerPath.length*50,
+    0.1
+  );
+
+  const expected =
+    path[playerPath.length];
+
+  if(
+    !expected ||
+    expected.x!==x ||
+    expected.y!==y
+  ){
     fail();
     return;
   }
+
   playerPath.push({x,y});
+
   drawGrid();
   drawPlayerPath();
+
   updateProgress();
-  if(playerPath.length === path.length){
+
+  if(
+    playerPath.length ===
+    path.length
+  ){
     success();
   }
 }
 
 function drawPlayerPath(){
+
   ctx.strokeStyle="lime";
   ctx.lineWidth=5;
   ctx.shadowBlur=15;
   ctx.shadowColor="lime";
 
   ctx.beginPath();
+
   playerPath.forEach((p,i)=>{
-    let x = p.x*cellSize+cellSize/2;
-    let y = p.y*cellSize+cellSize/2;
-    if(i===0) ctx.moveTo(x,y);
-    else ctx.lineTo(x,y);
+
+    let x =
+      p.x*cellSize+cellSize/2;
+
+    let y =
+      p.y*cellSize+cellSize/2;
+
+    if(i===0)
+      ctx.moveTo(x,y);
+    else
+      ctx.lineTo(x,y);
+
   });
+
   ctx.stroke();
 }
 
 function updateProgress(){
-  const percent = (playerPath.length / path.length)*100;
-  document.getElementById("progress").style.width = percent+"%";
+
+  const percent =
+    (
+      playerPath.length /
+      path.length
+    ) * 100;
+
+  document
+    .getElementById("progress")
+    .style.width =
+      percent + "%";
 }
 
-/* =========================
-   RESULTS SYSTEM
-========================= */
-function success() {
-  // Feedback
-  vibrate([50, 50, 100]);
-  playSound(800, 0.2);
-  // ===== LÍNEA MODIFICADA =====
-  const elapsedTime = startTime
-    ? (Date.now() - startTime) / 1000
-    : 0;
-  // Bonus entero basado en velocidad
-  const speedBonus = Math.floor(
-    Math.max(1, 5 - elapsedTime)
-  );
-  // Puntos base
-  const basePoints = 10 * combo;
-  // ===== LÍNEA MODIFICADA =====
-  score = Number(score) || 0;
-  // Score final (solo enteros)
-  score += basePoints + speedBonus;
-  // Seguridad extra para evitar decimales
-  score = Math.floor(score);
-  // Incrementos de progreso
+/* RESULTS SYSTEM */
+
+function success(){
+
+  vibrate([50,50,100]);
+
+  playSound(800,0.2);
+
+  const elapsedTime =
+    startTime
+      ? (Date.now()-startTime)/1000
+      : 0;
+
+  const speedBonus =
+    Math.floor(
+      Math.max(
+        1,
+        5 - elapsedTime
+      )
+    );
+
+  const basePoints =
+    10 * combo;
+
+  score =
+    Number(score) || 0;
+
+  score +=
+    basePoints + speedBonus;
+
+  score =
+    Math.floor(score);
+
   combo++;
   level++;
-  // Actualizar UI y guardar datos
+
   updateScore();
-  // Siguiente ronda
-  setTimeout(startGame, 500);
+
+  setTimeout(
+    startGame,
+    500
+  );
 }
 
-function fail() {
-  // Feedback de error
+function fail(){
+
   vibrate(300);
-  playSound(100, 0.3);
-  // Reiniciar combo
+
+  playSound(100,0.3);
+
   combo = 1;
-  // Evitar nivel menor a 1
-  level = Math.max(1, level - 1);
 
-  // Reiniciar partida
-  setTimeout(startGame, 800);
+  level = Math.max(
+    1,
+    level - 1
+  );
+
+  setTimeout(
+    startGame,
+    800
+  );
 }
 
-function updateScore() {
-  // Mostrar score entero
-  document.getElementById("score").textContent = Math.floor(score);
-  // Guardar progreso usuario
-  currentUser.score = Math.floor(score);
-  currentUser.level = level;
-  // Persistencia local
+function updateScore(){
+
+  document
+    .getElementById("score")
+    .textContent =
+      Math.floor(score);
+
+  document
+    .getElementById("level")
+    .textContent =
+      level;
+
+  currentUser.score =
+    Math.floor(score);
+
+  currentUser.level =
+    level;
+
   saveUsers();
 }
-function updateScore() {
-  // Mostrar score entero
-  document.getElementById("score").textContent = Math.floor(score);
-  document.getElementById("level").textContent = level;
-  // Guardar progreso usuario
-  currentUser.score = Math.floor(score);
-  currentUser.level = level;
-  saveUsers();
-}
-/* =========================
-   INIT
-========================= */
+
+/* INIT */
+
 renderUsers();
