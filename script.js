@@ -737,9 +737,7 @@ function startGame(){
 
     startTime = Date.now();
 
-  },4000);
-}
-
+  }, Math.max(1500, 4000 - (level * 20)));
 /* INPUT */
 
 canvas.addEventListener(
