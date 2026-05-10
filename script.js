@@ -45,6 +45,7 @@ function saveUsers() {
     JSON.stringify(users)
   );
 }
+
 function renderUsers() {
   const container =
     document.getElementById("profiles");
@@ -69,9 +70,7 @@ function renderUsers() {
     else if (user.score >= 200) rankIcon = "⭐";
     // Contenido HTML
     card.innerHTML = `
-
       <div class="profile-header">
-
         <div class="profile-avatar">
           ${rankIcon}
         </div>
@@ -108,19 +107,14 @@ function createUser() {
   const modal = document.createElement("div");
   modal.id = "userModal";
   modal.innerHTML = `
-
     <div class="modal-overlay">
-
       <div class="modal-box glow">
-
         <h2>
           👤 Crear Perfil
         </h2>
-
         <p>
           Ingresa tu nombre de jugador
         </p>
-
         <input
           type="text"
           id="usernameInput"
@@ -128,23 +122,16 @@ function createUser() {
           maxlength="14"
           autocomplete="off"
         >
-
         <div class="modal-buttons">
-
           <button id="cancelUserBtn">
             Cancelar
           </button>
-
           <button id="saveUserBtn">
             Crear Perfil
           </button>
-
         </div>
-
       </div>
-
     </div>
-
   `;
   // Insertar modal
   document.body.appendChild(modal);
@@ -243,22 +230,346 @@ function showScreen(id){
 }
 
 /* GAME LOGIC */
+const levels = [
+
+/* =========================
+   NIVELES FÁCILES
+========================= */
+
+{
+  level: 1,
+  name: "Línea",
+  points: [
+    {x:1,y:3},
+    {x:2,y:3},
+    {x:3,y:3},
+    {x:4,y:3}
+  ]
+},
+
+{
+  level: 2,
+  name: "Escalera",
+  points: [
+    {x:1,y:5},
+    {x:1,y:4},
+    {x:2,y:4},
+    {x:2,y:3},
+    {x:3,y:3}
+  ]
+},
+
+{
+  level: 3,
+  name: "Triángulo",
+  points: [
+    {x:2,y:5},
+    {x:4,y:1},
+    {x:6,y:5},
+    {x:2,y:5}
+  ]
+},
+
+{
+  level: 4,
+  name: "Casa",
+  points: [
+    {x:2,y:6},
+    {x:2,y:3},
+    {x:4,y:1},
+    {x:6,y:3},
+    {x:6,y:6},
+    {x:2,y:6}
+  ]
+},
+
+{
+  level: 5,
+  name: "Flecha",
+  points: [
+    {x:1,y:4},
+    {x:4,y:1},
+    {x:4,y:3},
+    {x:7,y:3},
+    {x:7,y:5},
+    {x:4,y:5},
+    {x:4,y:7},
+    {x:1,y:4}
+  ]
+},
+
+/* =========================
+   NIVELES MEDIOS
+========================= */
+
+{
+  level: 6,
+  name: "Diamante",
+  points: [
+    {x:4,y:1},
+    {x:7,y:4},
+    {x:4,y:7},
+    {x:1,y:4},
+    {x:4,y:1}
+  ]
+},
+
+{
+  level: 7,
+  name: "Barco",
+  points: [
+    {x:1,y:5},
+    {x:3,y:7},
+    {x:6,y:7},
+    {x:8,y:5},
+    {x:6,y:5},
+    {x:6,y:2},
+    {x:4,y:1},
+    {x:4,y:5},
+    {x:1,y:5}
+  ]
+},
+
+{
+  level: 8,
+  name: "Copa",
+  points: [
+    {x:2,y:1},
+    {x:6,y:1},
+    {x:5,y:4},
+    {x:4,y:5},
+    {x:4,y:7},
+    {x:5,y:8},
+    {x:3,y:8},
+    {x:4,y:7},
+    {x:4,y:5},
+    {x:3,y:4},
+    {x:2,y:1}
+  ]
+},
+
+{
+  level: 9,
+  name: "Rayo",
+  points: [
+    {x:4,y:1},
+    {x:2,y:4},
+    {x:4,y:4},
+    {x:3,y:7},
+    {x:6,y:3},
+    {x:4,y:3},
+    {x:4,y:1}
+  ]
+},
+
+{
+  level: 10,
+  name: "Pez",
+  points: [
+    {x:1,y:4},
+    {x:3,y:2},
+    {x:6,y:2},
+    {x:8,y:4},
+    {x:6,y:6},
+    {x:3,y:6},
+    {x:1,y:4},
+    {x:0,y:2},
+    {x:1,y:4},
+    {x:0,y:6}
+  ]
+},
+
+/* =========================
+   NIVELES AVANZADOS
+========================= */
+
+{
+  level: 11,
+  name: "Estrella",
+  points: [
+    {x:4,y:0},
+    {x:5,y:3},
+    {x:8,y:3},
+    {x:6,y:5},
+    {x:7,y:8},
+    {x:4,y:6},
+    {x:1,y:8},
+    {x:2,y:5},
+    {x:0,y:3},
+    {x:3,y:3},
+    {x:4,y:0}
+  ]
+},
+
+{
+  level: 12,
+  name: "Árbol",
+  points: [
+    {x:4,y:1},
+    {x:6,y:3},
+    {x:5,y:3},
+    {x:7,y:5},
+    {x:5,y:5},
+    {x:6,y:7},
+    {x:2,y:7},
+    {x:3,y:5},
+    {x:1,y:5},
+    {x:3,y:3},
+    {x:2,y:3},
+    {x:4,y:1},
+    {x:4,y:8}
+  ]
+},
+
+{
+  level: 13,
+  name: "Robot",
+  points: [
+    {x:2,y:1},
+    {x:6,y:1},
+    {x:6,y:5},
+    {x:5,y:5},
+    {x:5,y:7},
+    {x:3,y:7},
+    {x:3,y:5},
+    {x:2,y:5},
+    {x:2,y:1}
+  ]
+},
+
+{
+  level: 14,
+  name: "Mariposa",
+  points: [
+    {x:4,y:4},
+    {x:1,y:1},
+    {x:2,y:4},
+    {x:1,y:7},
+    {x:4,y:5},
+    {x:7,y:7},
+    {x:6,y:4},
+    {x:7,y:1},
+    {x:4,y:4}
+  ]
+},
+
+{
+  level: 15,
+  name: "Corona",
+  points: [
+    {x:1,y:7},
+    {x:2,y:2},
+    {x:4,y:5},
+    {x:6,y:2},
+    {x:7,y:7},
+    {x:1,y:7}
+  ]
+},
+
+/* =========================
+   NIVELES EXPERTOS
+========================= */
+
+{
+  level: 16,
+  name: "Dragón",
+  points: [
+    {x:1,y:6},
+    {x:3,y:3},
+    {x:5,y:4},
+    {x:7,y:1},
+    {x:8,y:3},
+    {x:6,y:5},
+    {x:8,y:7},
+    {x:5,y:6},
+    {x:3,y:8},
+    {x:1,y:6}
+  ]
+},
+
+{
+  level: 17,
+  name: "Castillo",
+  points: [
+    {x:1,y:7},
+    {x:1,y:2},
+    {x:2,y:2},
+    {x:2,y:4},
+    {x:4,y:1},
+    {x:6,y:4},
+    {x:6,y:2},
+    {x:7,y:2},
+    {x:7,y:7},
+    {x:1,y:7}
+  ]
+},
+
+{
+  level: 18,
+  name: "Murciélago",
+  points: [
+    {x:0,y:4},
+    {x:2,y:2},
+    {x:4,y:4},
+    {x:6,y:2},
+    {x:8,y:4},
+    {x:6,y:6},
+    {x:4,y:5},
+    {x:2,y:6},
+    {x:0,y:4}
+  ]
+},
+
+{
+  level: 19,
+  name: "Labrys",
+  points: [
+    {x:4,y:0},
+    {x:6,y:2},
+    {x:5,y:4},
+    {x:7,y:6},
+    {x:4,y:8},
+    {x:1,y:6},
+    {x:3,y:4},
+    {x:2,y:2},
+    {x:4,y:0}
+  ]
+},
+
+{
+  level: 20,
+  name: "Fénix",
+  points: [
+    {x:4,y:0},
+    {x:6,y:2},
+    {x:8,y:1},
+    {x:7,y:4},
+    {x:8,y:7},
+    {x:5,y:6},
+    {x:4,y:8},
+    {x:3,y:6},
+    {x:0,y:7},
+    {x:1,y:4},
+    {x:0,y:1},
+    {x:2,y:2},
+    {x:4,y:0}
+  ]
+}
+
+];
+
+/* GAME LOGIC */
 function generatePath(){
-  let p = [{x:2,y:2}];
-  let length = 3 + Math.floor(level/2);
-  while(p.length < length){
-    let last = p[p.length-1];
-    let moves = [
-      {x:1,y:0},{x:-1,y:0},{x:0,y:1},{x:0,y:-1}
-    ];
-    let valid = moves
-      .map(m=>({x:last.x+m.x,y:last.y+m.y}))
-      .filter(n=> n.x>=0 && n.y>=0 && n.x<size && n.y<size &&
-        !p.some(pp=>pp.x===n.x && pp.y===n.y));
-    if(valid.length===0) break;
-    p.push(valid[Math.floor(Math.random()*valid.length)]);
+
+  const currentLevel =
+    levels.find(l => l.level === level);
+
+  if(currentLevel){
+    return currentLevel.points;
   }
-  return p;
+
+  // Si supera los niveles creados
+  return levels[levels.length - 1].points;
 }
 
 function drawGrid(){
