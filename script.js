@@ -285,13 +285,65 @@ function showScreen(id){
 }
 
 /* =========================================
-   FIGURAS POR NIVELES
+   FIGURAS BASE
 ========================================= */
 
 const levels = [
 
+/* =========================================
+   NUEVOS NIVELES INFANTILES
+   MUY FÁCILES
+========================================= */
+
 {
-  level:1,
+  level: 1,
+  name: "Mini Línea",
+  points: [
+    {x:3,y:4},
+    {x:4,y:4}
+  ]
+},
+
+{
+  level: 2,
+  name: "Línea Fácil",
+  points: [
+    {x:2,y:4},
+    {x:3,y:4},
+    {x:4,y:4}
+  ]
+},
+
+{
+  level: 3,
+  name: "Cuadrado Simple",
+  points: [
+    {x:3,y:3},
+    {x:5,y:3},
+    {x:5,y:5},
+    {x:3,y:5},
+    {x:3,y:3}
+  ]
+},
+
+{
+  level: 4,
+  name: "Triángulo Fácil",
+  points: [
+    {x:4,y:2},
+    {x:6,y:6},
+    {x:2,y:6},
+    {x:4,y:2}
+  ]
+},
+
+/* =========================================
+   FIGURAS ORIGINALES
+   NO MODIFICADAS
+========================================= */
+
+{
+  level:5,
   name:"Línea",
   points:[
     {x:2,y:4},
@@ -302,7 +354,7 @@ const levels = [
 },
 
 {
-  level:2,
+  level:10,
   name:"Escalera",
   points:[
     {x:1,y:6},
@@ -314,7 +366,7 @@ const levels = [
 },
 
 {
-  level:3,
+  level:15,
   name:"Triángulo",
   points:[
     {x:2,y:6},
@@ -325,7 +377,7 @@ const levels = [
 },
 
 {
-  level:4,
+  level:20,
   name:"Casa",
   points:[
     {x:2,y:7},
@@ -338,7 +390,7 @@ const levels = [
 },
 
 {
-  level:5,
+  level:25,
   name:"Flecha",
   points:[
     {x:1,y:4},
@@ -353,7 +405,7 @@ const levels = [
 },
 
 {
-  level:6,
+  level:30,
   name:"Diamante",
   points:[
     {x:4,y:1},
@@ -365,7 +417,7 @@ const levels = [
 },
 
 {
-  level:7,
+  level:35,
   name:"Barco",
   points:[
     {x:1,y:6},
@@ -381,7 +433,7 @@ const levels = [
 },
 
 {
-  level:8,
+  level:40,
   name:"Copa",
   points:[
     {x:2,y:1},
@@ -399,7 +451,7 @@ const levels = [
 },
 
 {
-  level:9,
+  level:45,
   name:"Rayo",
   points:[
     {x:4,y:1},
@@ -413,7 +465,7 @@ const levels = [
 },
 
 {
-  level:10,
+  level:50,
   name:"Pez",
   points:[
     {x:1,y:4},
@@ -430,7 +482,7 @@ const levels = [
 },
 
 {
-  level:11,
+  level:55,
   name:"Estrella",
   points:[
     {x:4,y:0},
@@ -448,7 +500,7 @@ const levels = [
 },
 
 {
-  level:12,
+  level:60,
   name:"Árbol",
   points:[
     {x:4,y:1},
@@ -468,7 +520,7 @@ const levels = [
 },
 
 {
-  level:13,
+  level:65,
   name:"Robot",
   points:[
     {x:2,y:1},
@@ -484,7 +536,7 @@ const levels = [
 },
 
 {
-  level:14,
+  level:70,
   name:"Mariposa",
   points:[
     {x:4,y:4},
@@ -500,7 +552,7 @@ const levels = [
 },
 
 {
-  level:15,
+  level:75,
   name:"Corona",
   points:[
     {x:1,y:7},
@@ -513,7 +565,7 @@ const levels = [
 },
 
 {
-  level:16,
+  level:80,
   name:"Dragón",
   points:[
     {x:1,y:6},
@@ -530,7 +582,7 @@ const levels = [
 },
 
 {
-  level:17,
+  level:85,
   name:"Castillo",
   points:[
     {x:1,y:7},
@@ -547,7 +599,7 @@ const levels = [
 },
 
 {
-  level:18,
+  level:90,
   name:"Murciélago",
   points:[
     {x:0,y:4},
@@ -563,7 +615,7 @@ const levels = [
 },
 
 {
-  level:19,
+  level:95,
   name:"Labrys",
   points:[
     {x:4,y:0},
@@ -579,7 +631,7 @@ const levels = [
 },
 
 {
-  level:20,
+  level:100,
   name:"Fénix",
   points:[
     {x:4,y:0},
@@ -599,23 +651,15 @@ const levels = [
 }
 
 ];
-
 /* GAME LOGIC */
-
 function generatePath(){
-
-  const currentLevel =
-    levels.find(
-      l => l.level === level
-    );
-
-  if(currentLevel){
-    return currentLevel.points;
+  let currentFigure = levels[0];
+  for(let i = 0; i < levels.length; i++){
+    if(level >= levels[i].level){
+      currentFigure = levels[i];
+    }
   }
-
-  return levels[
-    levels.length - 1
-  ].points;
+  return currentFigure.points;
 }
 
 function drawGrid(){
