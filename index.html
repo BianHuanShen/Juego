@@ -160,7 +160,77 @@
     </div>
 
   </div>
+  <!-- =========================================
+     EDIT USER MODAL
+========================================= -->
 
+<div id="editUserModal" class="modal-overlay" style="display:none;">
+
+  <div class="modal-box glow">
+
+    <h2>✏️ Editar Nombre</h2>
+
+    <p>
+      Ingresa el nuevo nombre del jugador
+    </p>
+
+    <input
+      type="text"
+      id="editUsernameInput"
+      maxlength="14"
+      autocomplete="off"
+      placeholder="Nuevo nombre"
+    >
+
+    <div class="modal-buttons">
+
+      <button id="cancelEditBtn">
+        Cancelar
+      </button>
+
+      <button id="confirmEditBtn">
+        Guardar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================================
+     DELETE USER MODAL
+========================================= -->
+
+<div id="deleteUserModal" class="modal-overlay" style="display:none;">
+
+  <div class="modal-box glow">
+
+    <h2>⚠️ Eliminar Usuario</h2>
+
+    <p>
+      ¿Seguro que deseas borrar este usuario?<br><br>
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="modal-buttons">
+
+      <button id="cancelDeleteBtn">
+        Cancelar
+      </button>
+
+      <button
+        id="confirmDeleteBtn"
+        class="danger-btn"
+      >
+        Eliminar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
   <!-- =========================================
        SCRIPT
   ========================================== -->
