@@ -1608,5 +1608,5 @@ function generatePath(){
       levels.length - 1
     );
 
-  return levels[index].points;
+  return levels[index].points.slice();
 }
