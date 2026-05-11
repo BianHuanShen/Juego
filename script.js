@@ -141,57 +141,6 @@ function vibrate(ms){
    LEVELS
 ========================================= */
 
-const levels = [
-  {
-    level:1,
-    name:"Mini Línea",
-    points:[
-      {x:3,y:4},
-      {x:4,y:4}
-    ]
-  },
-  {
-    level:2,
-    name:"Línea Fácil",
-    points:[
-      {x:2,y:4},
-      {x:3,y:4},
-      {x:4,y:4}
-    ]
-  },
-  {
-    level:3,
-    name:"Cuadrado Simple",
-    points:[
-      {x:3,y:3},
-      {x:5,y:3},
-      {x:5,y:5},
-      {x:3,y:5},
-      {x:3,y:3}
-    ]
-  },
-  {
-    level:4,
-    name:"Triángulo Fácil",
-    points:[
-      {x:4,y:2},
-      {x:6,y:6},
-      {x:2,y:6},
-      {x:4,y:2}
-    ]
-  },
-  {
-    level:5,
-    name:"Línea",
-    points:[
-      {x:2,y:4},
-      {x:3,y:4},
-      {x:4,y:4},
-      {x:5,y:4}
-    ]
-  }
-];
-
 /* =========================================
    GAME LOGIC
 ========================================= */
