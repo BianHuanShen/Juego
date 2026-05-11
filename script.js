@@ -224,10 +224,14 @@ function resizeCanvas(){
   canvasSize =
     Math.floor(
       Math.min(
-        rect.width,
-        rect.height
+        rect.width || 400,
+        rect.height || 400
       )
     );
+
+  if(canvasSize <= 0){
+    canvasSize = 400;
+  }
 
   dpr =
     Math.min(
@@ -252,6 +256,10 @@ function resizeCanvas(){
 
   cellSize =
     canvasSize / size;
+
+  if(!isFinite(cellSize) || cellSize <= 0){
+    cellSize = 40;
+  }
 
   ctx.lineCap = "round";
 
@@ -1055,9 +1063,16 @@ function selectUser(i){
     "gameScreen"
   );
 
+  setTimeout(() => {
+
+    resizeCanvas();
+
+    requestRender();
+
+  }, 50);
+
   startGame();
 }
-
 /* =========================================
    SCREENS
 ========================================= */
